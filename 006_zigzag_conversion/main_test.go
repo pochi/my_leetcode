@@ -11,6 +11,9 @@ type Case struct {
 func Test_Examples(t *testing.T) {
 	cases := []Case{
 		Case{ String: "PAYPALISHIRING", NumRows: 3, Expected: "PAHNAPLSIIGYIR", },
+		Case{ String: "PAYPALISHIRING", NumRows: 4, Expected: "PINALSIGYAHRPI", },
+		Case{ String: "AB", NumRows: 2, Expected: "AB", },
+		Case{ String: "ABCD", NumRows: 2, Expected: "ACBD", },
 	}
 
 	for _, e := range cases {

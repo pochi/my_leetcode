@@ -2,7 +2,12 @@ package leetcode006
 
 //import "fmt"
 
+// ABCD,2 -> ACBD
 func convert(s string, numRows int) string {
+	if numRows == 1 {
+		return s
+	}
+	
 	runes := []rune(s)
 	zigzagMap := make(map[int]string, numRows)
 
@@ -28,14 +33,14 @@ func convert(s string, numRows int) string {
 		
 		marginCount += 1				
 
-		if i != 0 && marginCount % numRows == 0 {
+		if i != 0 && numRows > 2 && marginCount % numRows == 0 {
 			rowMargin = true
 		}
 	}
 
 	zigzagString := ""
-	for _, value := range zigzagMap {
-		zigzagString = zigzagString + value
+	for i:=0; i<numRows; i++ {
+		zigzagString = zigzagString + zigzagMap[i]
 	}
 	
 	return zigzagString
