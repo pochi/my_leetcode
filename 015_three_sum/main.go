@@ -1,13 +1,16 @@
 package leetcode015
 
-import "reflect"
 import "sort"
+import "strconv"
+//import "fmt"
 
 func threeSum(nums []int) [][]int {
 	under_zeros := []int{}
 	zeros := []int{}
 	over_zeros := []int{}
 	answers := [][]int{}
+	nm := map[int]bool {}
+	km := map[string]bool {}
 
 	for _, i := range nums {
 		if i < 0 {
@@ -17,33 +20,27 @@ func threeSum(nums []int) [][]int {
 		} else {
 			over_zeros = append(over_zeros, i)
 		}
+
+		nm[i] = true
 	}
 
-	sort.Ints(under_zeros)
-	sort.Ints(over_zeros)
+	var (
+		c []int
+		k string
+	)
 
-	var d bool // d -> duplicate
-
-	// Dirty program
 	if len(zeros) >= 3 {
 		answers = append(answers, []int{0,0,0})
 	}
 
-	var c []int
-	
 	if len(zeros) >= 1 {
 		for i:=0; i<len(under_zeros); i++ {
-			if find(over_zeros, under_zeros[i]*-1) {
-				d = false
+			if nm[under_zeros[i]*-1] {
 				c = []int{under_zeros[i], 0, under_zeros[i]*-1}
-				for i:=0; i<len(answers); i++ {
-					if reflect.DeepEqual(c, answers[i]) {
-						d = true
-					}
-				}
-
-				if d == false {
+				k = createKey(c)
+				if km[k] == false {
 					answers = append(answers, c)						
+					km[k] = true
 				}
 			}
 		}
@@ -52,18 +49,14 @@ func threeSum(nums []int) [][]int {
 
 	for i:=0; i<(len(under_zeros)-1); i++ {
 		for j:=i+1; j<len(under_zeros); j++ {
-			if find(over_zeros, (under_zeros[i] + under_zeros[j])*-1) {
-				d = false
+			if nm[(under_zeros[i] + under_zeros[j])*-1] {
 				c = []int{under_zeros[i], under_zeros[j], (under_zeros[i] + under_zeros[j])*-1}
 				sort.Ints(c)
-				for i:=0; i<len(answers); i++ {
-					if reflect.DeepEqual(c, answers[i]) {
-						d = true
-					}
-				}
-
-				if d == false {
-					answers = append(answers, c)					
+				k = createKey(c)
+				//fmt.Println(k)
+				if km[k] == false {
+					answers = append(answers, c)						
+					km[k] = true
 				}
 			}
 		}
@@ -71,19 +64,15 @@ func threeSum(nums []int) [][]int {
 
 	for i:=0; i<(len(over_zeros)-1); i++ {
 		for j:=i+1; j<len(over_zeros); j++ {
-			if find(under_zeros, (over_zeros[i] + over_zeros[j])*-1) {
-				d = false
+			if nm[(over_zeros[i] + over_zeros[j])*-1] {
 				c = []int{over_zeros[i], over_zeros[j], (over_zeros[i] + over_zeros[j])*-1}
 				sort.Ints(c)
-				for i:=0; i<len(answers); i++ {
-					if reflect.DeepEqual(c, answers[i]) {
-						d = true
-					}
+				k = createKey(c)
+				if km[k] == false {
+					answers = append(answers, c)
+					km[k] = true					
 				}
-
-				if d == false {
-					answers = append(answers, c)					
-				}
+				
 			}
 		}
 	}
@@ -91,6 +80,11 @@ func threeSum(nums []int) [][]int {
 	return answers
 }
 
+func createKey(nums []int) string {
+	return strconv.Itoa(nums[0]) + "_" + strconv.Itoa(nums[1]) + "_" + strconv.Itoa(nums[2])
+}
+
+// INFO: binary search tree. not used.
 func find(nums []int, t int) bool {
 	l := len(nums)
     s := 0
