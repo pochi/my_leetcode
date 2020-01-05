@@ -19,6 +19,9 @@ func threeSum(nums []int) [][]int {
 		}
 	}
 
+	sort.Ints(under_zeros)
+	sort.Ints(over_zeros)
+
 	var d bool // d -> duplicate
 
 	// Dirty program
@@ -43,6 +46,11 @@ func threeSum(nums []int) [][]int {
 					if d == false {
 						answers = append(answers, c)						
 					}
+					break
+				}
+
+				if (under_zeros[i]*-1) < over_zeros[j] {
+					break
 				}
 			}
 		}
@@ -64,8 +72,11 @@ func threeSum(nums []int) [][]int {
 
 					if d == false {
 						answers = append(answers, c)					
-						
 					}
+				}
+
+				if ((under_zeros[i]+under_zeros[j])*-1) < over_zeros[h] {
+					break
 				}
 			}
 		}
@@ -86,8 +97,12 @@ func threeSum(nums []int) [][]int {
 
 					if d == false {
 						answers = append(answers, c)					
-						
 					}
+					break
+				}
+
+				if (over_zeros[i]+over_zeros[j]) > (under_zeros[h]*-1) {
+					break
 				}
 			}
 		}
